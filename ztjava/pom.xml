@@ -7,22 +7,6 @@
 		<artifactId>projects-parent-odatav2</artifactId>
 		<version>1.25.0</version>
 	</parent>
-	<artifactId>ztjava</artifactId>
-	<groupId>com.company.ztjvodt</groupId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>ztjava</name>
-	<properties>
-		<packageName>com.company.ztjvodt.ztjava</packageName>
-	</properties>
-	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-	</build>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -49,28 +33,22 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<activation>
-				<property>
-					<name>devmode</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>3.0.0</version>
-						<configuration>
-							<webResources combine.children="append">
-								<resource>
-									<directory>${project.build.sourceDirectory}</directory>
-									<targetPath>sources</targetPath>
-								</resource>
-							</webResources>
-						</configuration>
-					</plugin>
+	<artifactId>ztjava</artifactId>
+	<groupId>com.company.ztjvodt</groupId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>ztjava</name>
+	<properties>
+		<packageName>com.company.ztjvodt.ztjava</packageName>
+	</properties>
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<plugins>
 					<plugin>
 						<groupId>com.sap.cloud.s4hana.datamodel</groupId>
 						<artifactId>odata-generator-maven-plugin</artifactId>
@@ -108,6 +86,30 @@
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<activation>
+				<property>
+					<name>devmode</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.0.0</version>
+						<configuration>
+							<webResources combine.children="append">
+								<resource>
+									<directory>${project.build.sourceDirectory}</directory>
+									<targetPath>sources</targetPath>
+								</resource>
+							</webResources>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>

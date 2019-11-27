@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.company.ztjvodt.ztjava.namespaces.demoservice2.Product;
+import com.company.ztjvodt.ztjava.services.DefaultDemoService2Service;
 import com.sap.cloud.sdk.odatav2.connectivity.ODataException;
 import com.sap.cloud.sdk.odatav2.connectivity.ODataQueryBuilder;
 import com.sap.cloud.sdk.odatav2.connectivity.ODataQueryResult;
@@ -34,14 +36,12 @@ public class PsesonService {
 	private static List<Map<String, Object>> peopleList = null;
 
 	@Query(serviceName = "DemoService2", entity = "Products")
-	public QueryResponse getPeople2(QueryRequest request) {
+	public QueryResponse getProducts(QueryRequest request) {
 
 		try {
-			ODataQueryResult result = ODataQueryBuilder.withEntity("/V2/OData/OData.svc", "Products").build()
-					.execute("odatarefservices");
-			List<Map<String, Object>> productList = result.asListOfMaps();
-
-			return QueryResponse.setSuccess().setDataAsMap(productList).response();
+			final List<Product> productsList = new DefaultDemoService2Service().getAllProduct()
+					.select(Product.ID, Product.NAME, Product.DESCRIPTION).execute();
+			return QueryResponse.setSuccess().setData(productsList).response();
 
 		} catch (ODataException e) {
 			return QueryResponse.setError(ErrorResponse.getBuilder()
@@ -49,6 +49,25 @@ public class PsesonService {
 					.setStatusCode(500).response());
 		}
 	}
+
+	// @Query(serviceName = "DemoService2", entity = "Products")
+	// public QueryResponse getProducts(QueryRequest request) {
+	//
+	// try {
+	// ODataQueryResult result =
+	// ODataQueryBuilder.withEntity("/V2/OData/OData.svc", "Products").build()
+	// .execute("odatarefservices");
+	// List<Map<String, Object>> productList = result.asListOfMaps();
+	//
+	// return QueryResponse.setSuccess().setDataAsMap(productList).response();
+	//
+	// } catch (ODataException e) {
+	// return QueryResponse.setError(ErrorResponse.getBuilder()
+	// .setMessage("Error occurred while getting products from backend. See
+	// error log for details.")
+	// .setStatusCode(500).response());
+	// }
+	// }
 
 	@Query(serviceName = "DemoService", entity = "People")
 	public QueryResponse getPeople(QueryRequest request) {
