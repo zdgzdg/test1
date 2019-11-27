@@ -1,0 +1,53 @@
+ID: ztJvOdt
+_schema-version: '2.1'
+description: test java odata
+version: 0.0.1
+modules:
+  - name: thdb
+    type: hdb
+    path: thdb
+    requires:
+      - name: hdi_thdb
+  - name: ztjava
+    type: java
+    path: ztjava
+    parameters:
+      memory: 1024M
+    provides:
+      - name: ztjava_api
+        properties:
+          url: '${default-url}'
+    requires:
+      - name: hdi_thdb
+        properties:
+          JBP_CONFIG_RESOURCE_CONFIGURATION: '[tomcat/webapps/ROOT/META-INF/context.xml: {"service_name_for_DefaultDB" : "~{hdi-container-name}"}]'
+      - name: ztjava_api
+        properties:
+          ALLOW_MOCKED_AUTH_HEADER: true
+  - name: zui5
+    type: html5
+    path: zui5
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    build-parameters:
+      builder: grunt
+    requires:
+      - name: uaa_ztJvOdt
+      - name: dest_ztJvOdt
+resources:
+  - name: hdi_thdb
+    properties:
+      hdi-container-name: '${service-name}'
+    type: org.cloudfoundry.existing-service
+  - name: uaa_ztJvOdt
+    parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+    type: org.cloudfoundry.managed-service
+  - name: dest_ztJvOdt
+    parameters:
+      service-plan: lite
+      service: destination
+    type: org.cloudfoundry.managed-service
